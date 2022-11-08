@@ -8,16 +8,18 @@ public class UserDTO {
     private Long id;
     private String name;
     private String surname;
-    @NonNull
     private String email;
     private Long Reputation;
 
-    public UserDTO(Long id, String name, String surname, String email, Long reputation) {
+    private String role;
+
+    public UserDTO(Long id, String name, String surname, String email, Long reputation,String role) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.Reputation = reputation;
+        this.role = role;
     }
 
     public Long getId() {
