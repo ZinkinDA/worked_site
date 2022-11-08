@@ -63,4 +63,6 @@ public class UserRestController {
         }
         return ResponseEntity.badRequest().body("Пользователей у сайта нет.");
     }
+
+
 }

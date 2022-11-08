@@ -10,7 +10,6 @@ public class UserDTO {
     private String surname;
     private String email;
     private Long Reputation;
-
     private String role;
 
     public UserDTO(Long id, String name, String surname, String email, Long reputation,String role) {
@@ -19,6 +18,14 @@ public class UserDTO {
         this.surname = surname;
         this.email = email;
         this.Reputation = reputation;
+        this.role = role;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
         this.role = role;
     }
 
