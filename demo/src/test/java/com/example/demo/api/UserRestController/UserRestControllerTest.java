@@ -21,7 +21,6 @@ public class UserRestControllerTest extends AbstractTestApi {
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Dmitry"))
                 .andExpect(jsonPath("$.surname").value("Zinkin"))
-                .andExpect(jsonPath("$.password").value("**********"))
                 .andExpect(jsonPath("$.reputation").value(0));
     }
 

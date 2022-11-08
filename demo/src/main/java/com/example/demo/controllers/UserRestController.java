@@ -35,7 +35,6 @@ public class UserRestController {
                     .name(optionalUser.get().getName())
                     .surname(optionalUser.get().getSurname())
                     .email(optionalUser.get().getEmail())
-                    .password("**********")
                     .Reputation(optionalUser.get().getReputation())
                     .build();
             return ResponseEntity.ok(userDTO);

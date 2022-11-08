@@ -10,16 +10,13 @@ public class UserDTO {
     private String surname;
     @NonNull
     private String email;
-    @NonNull
-    private String password;
     private Long Reputation;
 
-    public UserDTO(Long id, String name, String surname, String email, String password, Long reputation) {
+    public UserDTO(Long id, String name, String surname, String email, Long reputation) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.password = password;
         this.Reputation = reputation;
     }
 
@@ -53,14 +50,6 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Long getReputation() {
