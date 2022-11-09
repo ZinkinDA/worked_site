@@ -1,13 +1,15 @@
 package com.example.demo.controllers;
 
+import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.model.dto.UserDTO;
+import com.example.demo.service.Role.RoleService;
 import com.example.demo.service.User.UserService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +21,18 @@ public class UserRestController {
 
     private final UserService userService;
 
-    public UserRestController(UserService userService) {
-        this.userService = userService;
-    }
+    private final RoleService roleService;
 
+    public UserRestController(UserService userService, RoleService roleService) {
+        this.userService = userService;
+        this.roleService = roleService;
+    }
+    @ApiOperation(value = "Получение профиля пользователей")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Пользователь по id получен."),
+            @ApiResponse(code = 400, message = "Введите id пользователя.\n" +
+                    "Пока мы разрабатываем без spring security,в будущем это будет страница авторизованного ползователя."),
+            @ApiResponse(code = 404, message = "Пользователь не найден")})
     @GetMapping("/profile")
     public ResponseEntity<?> getAccountProfile(@RequestParam(required = false) Long id){
         if(id == null){
@@ -43,7 +53,10 @@ public class UserRestController {
         }
         return ResponseEntity.status(404).body("Пользователь не найден");
     }
-
+    @ApiOperation(value = "Получение всех пользователей")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Пользователи получены."),
+            @ApiResponse(code = 400, message = "Пользователей у сайта нет")})
     @GetMapping("/users")
     public ResponseEntity<?> getAllAccount(){
         List<User> listUser = userService.findAll();
@@ -63,6 +76,37 @@ public class UserRestController {
         }
         return ResponseEntity.badRequest().body("Пользователей у сайта нет.");
     }
+
+    @ApiOperation(value = "Регистрация аккаунта.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Пользователь зарегистрирован"),
+            @ApiResponse(code = 400, message = "Пользователь не создан."),
+            @ApiResponse(code = 424, message = "Присваиваемой Роли не существует")})
+    @PostMapping("/registration")
+    public ResponseEntity<?> registrationAccount(@RequestBody UserDTO userDTO){
+        Optional<Role> standartRole = roleService.findAll().stream().filter(x -> x.getName().equals("CLIENT")).findFirst();
+        if(standartRole.isPresent()) {
+            if (userDTO.getRole() != null && userDTO.getEmail() != null
+                    && userDTO.getName() != null && userDTO.getSurname() != null
+                    && userDTO.getPassword() != null) {
+                User user = User.builder()
+                        .role(standartRole.get())
+                        .name(userDTO.getName())
+                        .surname(userDTO.getSurname())
+                        .email(userDTO.getEmail())
+                        .password(userDTO.getPassword())
+                        .executed(new ArrayList<>())
+                        .ordersList(new ArrayList<>())
+                        .Reputation(0L)
+                        .build();
+                userService.saveUser(user);
+                return ResponseEntity.ok().body("Пользователь создан успешно");
+            }
+            return ResponseEntity.badRequest().body("Пользователь не создан.");
+        }
+        return ResponseEntity.status(424).body("Присваемой пользователю роли не существует.");
+    }
+
 
 
 }

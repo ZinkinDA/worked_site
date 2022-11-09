@@ -2,23 +2,33 @@ package com.example.demo.model.dto;
 
 import lombok.Builder;
 import lombok.NonNull;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Builder
 
 public class UserDTO {
     private Long id;
+    @NonNull
     private String name;
+    @NonNull
     private String surname;
+    @NonNull
     private String email;
     private Long Reputation;
+    @NonNull
     private String role;
+    @JsonIgnore
+    @NonNull
+    private String password;
 
-    public UserDTO(Long id, String name, String surname, String email, Long reputation,String role) {
+    public UserDTO(Long id, String name, String surname, String email, Long reputation,String role,String password) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.Reputation = reputation;
         this.role = role;
+        this.password = password;
     }
 
     public String getRole() {
@@ -67,5 +77,13 @@ public class UserDTO {
 
     public void setReputation(Long reputation) {
         Reputation = reputation;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
