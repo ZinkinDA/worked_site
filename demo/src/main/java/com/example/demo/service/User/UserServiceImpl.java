@@ -30,4 +30,9 @@ public class UserServiceImpl implements UserService {
     public void saveUser(User user){
         userDao.save(user);
     }
+
+    @Override
+    public void deleteAccount(Long id) {
+        userDao.deleteById(id);
+    }
 }

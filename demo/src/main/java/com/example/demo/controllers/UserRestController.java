@@ -27,7 +27,7 @@ public class UserRestController {
         this.userService = userService;
         this.roleService = roleService;
     }
-    @ApiOperation(value = "Получение профиля пользователей")
+    @ApiOperation(value = "Получение профиля пользователей(UserDTO)")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Пользователь по id получен."),
             @ApiResponse(code = 400, message = "Введите id пользователя.\n" +
@@ -53,7 +53,7 @@ public class UserRestController {
         }
         return ResponseEntity.status(404).body("Пользователь не найден");
     }
-    @ApiOperation(value = "Получение всех пользователей")
+    @ApiOperation(value = "Получение всех пользователей (UserDTO)")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Пользователи получены."),
             @ApiResponse(code = 400, message = "Пользователей у сайта нет")})
@@ -106,7 +106,18 @@ public class UserRestController {
         }
         return ResponseEntity.status(424).body("Присваемой пользователю роли не существует.");
     }
-
-
+    @ApiOperation(value = "Удаление аккаунта.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Пользователь удален"),
+            @ApiResponse(code = 400, message = "Пользователя не существует")})
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteAccount(@PathVariable Long id){
+        Optional<User> user = userService.findById(id);
+        if(user.isPresent()) {
+            userService.deleteAccount(id);
+            return ResponseEntity.ok().body("Аккаунт удaлен.");
+        }
+        return ResponseEntity.badRequest().body("Пользователя и так не существует.");
+    }
 
 }
